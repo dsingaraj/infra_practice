@@ -1,0 +1,25 @@
+{
+    "builders":[
+        {
+            "type" : "amazon-ebs",
+            "region" : "us-west-2",
+            "source_ami":"ami-0d2017e886fc2c0ab",
+            "instance_type" : "t2.micro",
+            "ssh_username" : "ec2-user",
+            "ami_name" : "packer-jenkins-ami-{{timestamp}}"
+        }
+    ],
+    "provisioners":[
+        {
+            "type" : "shell",
+            "inline" : [
+                "sudo yum update -y",
+                "sudo yum remove java -y",
+                "sudo yum install java-11-amazon-corretto-headless -y",
+                "sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo",
+                "sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key",
+                "sudo yum install jenkins -y"
+            ] 
+        }
+    ]
+}

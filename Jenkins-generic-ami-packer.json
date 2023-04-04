@@ -1,0 +1,25 @@
+{
+    "builders":[
+        {
+            "type" : "amazon-ebs",
+            "region":"us-west-2",
+            "source_ami":"ami-0d2017e886fc2c0ab",
+            "instance_type":"t2.micro",
+            "ssh_username":"ec2-user",
+            "ami_name":"packer-jenkins-generic-ami-{{timestamp}}"
+        }
+    ],
+    "provisioners":[
+        {
+            "type" : "shell",
+            "inline":[
+                "sudo yum update -y",
+                "sudo yum remove java -y",
+                "sudo yum install java-11-amazon-corretto-headless -y",
+                "echo pwd",
+                "sudo wget https://get.jenkins.io/war-stable/2.319.3/jenkins.war",
+                "sudo chmod 755 jenkins.war"
+            ]
+        }
+    ]
+}
